@@ -13,12 +13,12 @@ A React app that allows users to browse and order meals from a restaurant.
 
 To run this project locally, you need to have Node.js and npm installed on your machine.
 
-- Clone this repository using `git clone https://github.com/your-username/food-menu.git`
+- Clone this repository using `git clone https://github.com/akifalbayrak/food-menu.git`
 - Install the dependencies using `npm install`
 - Start the development server using `npm run dev`
-- Split terminal and navigate to the project backend folder using `cd backend`
-- Install the dependencies using `npm install`
-- Start the backend server using `node app.js`
+<!-- - Split terminal and navigate to the project backend folder using `cd backend` -->
+<!-- - Install the dependencies using `npm install` -->
+<!-- - Start the backend server using `node app.js` -->
 - 
 - Open `http://localhost:5173` in your browser to see the app
 - 

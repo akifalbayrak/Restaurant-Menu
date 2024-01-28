@@ -1,5 +1,5 @@
 import { useContext } from "react";
-
+import swal from 'sweetalert';
 import Modal from "./UI/Modal.jsx";
 import CartContext from "../store/CartContext.jsx";
 import { currencyFormatter } from "../util/formatting.js";
@@ -51,40 +51,32 @@ export default function Checkout() {
 
     function handleSubmit(event) {
         event.preventDefault();
-
-        // const fd = new FormData(event.target);
-        // const customerData = Object.fromEntries(fd.entries()); // { email: test@example.com }
-
-        // sendRequest(
-        //     JSON.stringify({
-        //         order: {
-        //             items: cartCtx.items,
-        //             customer: customerData,
-        //         },
-        //     })
-        // );
-        {cartCtx.items.map((item) => (
-            addOrder(item.name,item.quantity,item.price)
-        ))}
-        
     
-    }
-
-    const addOrder = async (name,quantity,price) => {
         const orderCollectionRef = collection(db, "order");
+        const currentDate = new Date();
+    
+        cartCtx.items.forEach(async (item) => {
+            try {
+                await addDoc(orderCollectionRef, {
+                    name: item.name,
+                    price: item.price,
+                    quantity: item.quantity,
+                    userId: auth?.currentUser?.uid,
+                    orderDate: currentDate,
+                });
+            } catch (err) {
+                console.error(err);
+            }
+        });
+    
+        handleClose();
+        swal({
+            text: "Ordered Successfully!",
+            icon: "success",
+        });
+    }
+    
 
-        try {
-            
-            await addDoc(orderCollectionRef, {
-                name,
-                price,
-                quantity,
-                userId: auth?.currentUser?.uid,
-            });
-        } catch (err) {
-            console.error(err);
-        }
-    };
     let actions = (
         <>
             <Button type="button" textOnly onClick={handleClose}>
