@@ -27,13 +27,6 @@ export default function Checkout() {
     const cartCtx = useContext(CartContext);
     const userProgressCtx = useContext(UserProgressContext);
 
-    // const {
-    //     data,
-    //     isLoading: isSending,
-    //     error,
-    //     sendRequest,
-    //     clearData,
-    // } = useHttp("http://localhost:3000/orders", requestConfig);
     const cartTotal = cartCtx.items.reduce(
         (totalPrice, item) => totalPrice + item.quantity * item.price,
         0
@@ -59,24 +52,31 @@ export default function Checkout() {
     
         cartCtx.items.forEach(async (item) => {
             try {
-                await addDoc(orderCollectionRef, {
+                if (auth && auth.currentUser){
+                                    await addDoc(orderCollectionRef, {
                     name: item.name,
                     price: item.price,
                     quantity: item.quantity,
-                    userId: auth?.currentUser?.uid,
+                    userPhone: auth?.currentUser?.phoneNumber,
                     orderDate: currentDate,
                     tableNumber: tableNumber,
                 });
+                swal({
+                    text: "Ordered Successfully!",
+                    icon: "success",
+                });
+                }else{
+                    throw new Error("Authentication Error");
+                }
+
             } catch (err) {
-                console.error(err);
+                console.log(err)
+                swal("Authentication Error", "Please Sign In", "error");
             }
         });
     
         handleClose();
-        swal({
-            text: "Ordered Successfully!",
-            icon: "success",
-        });
+
     }
     
 
