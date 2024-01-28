@@ -54,6 +54,8 @@ export default function Checkout() {
     
         const orderCollectionRef = collection(db, "order");
         const currentDate = new Date();
+        const tableNumber = document.getElementById('tnum').value;
+
     
         cartCtx.items.forEach(async (item) => {
             try {
@@ -63,6 +65,7 @@ export default function Checkout() {
                     quantity: item.quantity,
                     userId: auth?.currentUser?.uid,
                     orderDate: currentDate,
+                    tableNumber: tableNumber,
                 });
             } catch (err) {
                 console.error(err);
