@@ -6,9 +6,16 @@ import { currencyFormatter } from "../util/formatting.js";
 import Input from "./UI/Input.jsx";
 import Button from "./UI/Button.jsx";
 import UserProgressContext from "../store/UserProgressContext.jsx";
-import useHttp from "../hooks/useHttp.js";
 import Error from "./Error.jsx";
-
+import { db, auth, storage } from "../config/firebase.js";
+import {
+    getDocs,
+    collection,
+    addDoc,
+    deleteDoc,
+    updateDoc,
+    doc,
+} from "firebase/firestore";
 const requestConfig = {
     method: "POST",
     headers: {
@@ -20,14 +27,13 @@ export default function Checkout() {
     const cartCtx = useContext(CartContext);
     const userProgressCtx = useContext(UserProgressContext);
 
-    const {
-        data,
-        isLoading: isSending,
-        error,
-        sendRequest,
-        clearData,
-    } = useHttp("http://localhost:3000/orders", requestConfig);
-
+    // const {
+    //     data,
+    //     isLoading: isSending,
+    //     error,
+    //     sendRequest,
+    //     clearData,
+    // } = useHttp("http://localhost:3000/orders", requestConfig);
     const cartTotal = cartCtx.items.reduce(
         (totalPrice, item) => totalPrice + item.quantity * item.price,
         0
@@ -46,19 +52,39 @@ export default function Checkout() {
     function handleSubmit(event) {
         event.preventDefault();
 
-        const fd = new FormData(event.target);
-        const customerData = Object.fromEntries(fd.entries()); // { email: test@example.com }
+        // const fd = new FormData(event.target);
+        // const customerData = Object.fromEntries(fd.entries()); // { email: test@example.com }
 
-        sendRequest(
-            JSON.stringify({
-                order: {
-                    items: cartCtx.items,
-                    customer: customerData,
-                },
-            })
-        );
+        // sendRequest(
+        //     JSON.stringify({
+        //         order: {
+        //             items: cartCtx.items,
+        //             customer: customerData,
+        //         },
+        //     })
+        // );
+        {cartCtx.items.map((item) => (
+            addOrder(item.name,item.quantity,item.price)
+        ))}
+        
+    
     }
 
+    const addOrder = async (name,quantity,price) => {
+        const orderCollectionRef = collection(db, "order");
+
+        try {
+            
+            await addDoc(orderCollectionRef, {
+                name,
+                price,
+                quantity,
+                userId: auth?.currentUser?.uid,
+            });
+        } catch (err) {
+            console.error(err);
+        }
+    };
     let actions = (
         <>
             <Button type="button" textOnly onClick={handleClose}>
@@ -68,11 +94,11 @@ export default function Checkout() {
         </>
     );
 
-    if (isSending) {
-        actions = <span>Sending order data...</span>;
-    }
+    // if (isSending) {
+    //     actions = <span>Sending order data...</span>;
+    // }
 
-    if (data && !error) {
+    if (false) {
         return (
             <Modal
                 open={userProgressCtx.progress === "checkout"}
@@ -96,17 +122,24 @@ export default function Checkout() {
             onClose={handleClose}>
             <form onSubmit={handleSubmit}>
                 <h2>Checkout</h2>
+                <ul>
+                    {cartCtx.items.map((item) => (
+                        <li key={item.id}>
+                            {item.name} x {item.quantity} - ${item.price}
+                        </li>
+                    ))}
+                </ul>
                 <p>Total Amount: {currencyFormatter.format(cartTotal)}</p>
 
-                <Input label="Full Name" type="text" id="name" />
-                <Input label="E-Mail Address" type="email" id="email" />
+                <Input label="Table Number" type="number" id="tnum" />
+                {/* <Input label="E-Mail Address" type="email" id="email" />
                 <Input label="Street" type="text" id="street" />
                 <div className="control-row">
                     <Input label="Postal Code" type="text" id="postal-code" />
                     <Input label="City" type="text" id="city" />
-                </div>
+                </div> */}
 
-                {error && (
+                {false && (
                     <Error title="Failed to submit order" message={error} />
                 )}
 

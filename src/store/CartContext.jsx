@@ -1,87 +1,133 @@
-import { createContext, useReducer } from 'react';
-
+import { createContext, useReducer } from "react";
+import { db, auth } from "../config/firebase";
+import {
+    getDocs,
+    collection,
+    addDoc,
+    deleteDoc,
+    updateDoc,
+    doc,
+} from "firebase/firestore";
 const CartContext = createContext({
-  items: [],
-  addItem: (item) => {},
-  removeItem: (id) => {},
-  clearCart: () => {},
+    items: [],
+    addItem: (item) => {},
+    removeItem: (id) => {},
+    clearCart: () => {},
 });
 
 function cartReducer(state, action) {
-  if (action.type === 'ADD_ITEM') {
-    const existingCartItemIndex = state.items.findIndex(
-      (item) => item.id === action.item.id
-    );
+    if (action.type === "ADD_ITEM") {
+        const existingCartItemIndex = state.items.findIndex(
+            (item) => item.id === action.item.id
+        );
 
-    const updatedItems = [...state.items];
+        const updatedItems = [...state.items];
 
-    if (existingCartItemIndex > -1) {
-      const existingItem = state.items[existingCartItemIndex];
-      const updatedItem = {
-        ...existingItem,
-        quantity: existingItem.quantity + 1,
-      };
-      updatedItems[existingCartItemIndex] = updatedItem;
-    } else {
-      updatedItems.push({ ...action.item, quantity: 1 });
+        if (existingCartItemIndex > -1) {
+            const existingItem = state.items[existingCartItemIndex];
+            const updatedItem = {
+                ...existingItem,
+                quantity: existingItem.quantity + 1,
+            };
+            updatedItems[existingCartItemIndex] = updatedItem;
+        } else {
+            updatedItems.push({ ...action.item, quantity: 1 });
+        }
+
+        return { ...state, items: updatedItems };
     }
 
-    return { ...state, items: updatedItems };
-  }
+    if (action.type === "REMOVE_ITEM") {
+        const existingCartItemIndex = state.items.findIndex(
+            (item) => item.id === action.id
+        );
+        const existingCartItem = state.items[existingCartItemIndex];
 
-  if (action.type === 'REMOVE_ITEM') {
-    const existingCartItemIndex = state.items.findIndex(
-      (item) => item.id === action.id
-    );
-    const existingCartItem = state.items[existingCartItemIndex];
+        const updatedItems = [...state.items];
 
-    const updatedItems = [...state.items];
+        if (existingCartItem.quantity === 1) {
+            updatedItems.splice(existingCartItemIndex, 1);
+        } else {
+            const updatedItem = {
+                ...existingCartItem,
+                quantity: existingCartItem.quantity - 1,
+            };
+            updatedItems[existingCartItemIndex] = updatedItem;
+        }
 
-    if (existingCartItem.quantity === 1) {
-      updatedItems.splice(existingCartItemIndex, 1);
-    } else {
-      const updatedItem = {
-        ...existingCartItem,
-        quantity: existingCartItem.quantity - 1,
-      };
-      updatedItems[existingCartItemIndex] = updatedItem;
+        return { ...state, items: updatedItems };
     }
 
-    return { ...state, items: updatedItems };
-  }
+    if (action.type === "CLEAR_CART") {
+        return { ...state, items: [] };
+    }
 
-  if (action.type === 'CLEAR_CART') {
-    return { ...state, items: [] };
-  }
-
-  return state;
+    return state;
 }
 
 export function CartContextProvider({ children }) {
-  const [cart, dispatchCartAction] = useReducer(cartReducer, { items: [] });
 
-  function addItem(item) {
-    dispatchCartAction({ type: 'ADD_ITEM', item });
-  }
+    const order = []
+    const orderCollectionRef = collection(db, "order");
+    const [cart, dispatchCartAction] = useReducer(cartReducer, { items: [] });
+    // const getOrderList = async () => {
+    //     try {
+    //         const data = await getDocs(orderCollectionRef);
+    //         const filteredData = data.docs.map((doc) => ({
+    //             ...doc.data(),
+    //             id: doc.id,
+    //         }));
+    //     } catch (err) {
+    //         console.error(err);
+    //     }
+    // };
+    // getOrderList();
 
-  function removeItem(id) {
-    dispatchCartAction({ type: 'REMOVE_ITEM', id });
-  }
+    // const addOrder = async (meal) => {
+    //     try {
+    //         await addDoc(orderCollectionRef, {
+    //             name : meal.name,
+    //             userId: auth?.currentUser?.uid,
+    //         });
+    //     } catch (err) {
+    //         console.error(err);
+    //     }
+    // };
 
-  function clearCart() {
-    dispatchCartAction({ type: 'CLEAR_CART' });
-  }
+    const deleteOrder = async (id) => {
+        const orderDoc = doc(db, "order", id);
+        await deleteDoc(orderDoc);
+    };
 
-  const cartContext = {
-    items: cart.items,
-    addItem,
-    removeItem,
-    clearCart
-  };
+    const updateOrder = async (id) => {
+        const movieDoc = doc(db, "movies", id);
+        await updateDoc(movieDoc, { title: updatedTitle });
+    };
 
-  return (
-    <CartContext.Provider value={cartContext}>{children}</CartContext.Provider>
-  );
+    function addItem(item) {
+        dispatchCartAction({ type: "ADD_ITEM", item });
+    }
+
+    function removeItem(id) {
+        dispatchCartAction({ type: "REMOVE_ITEM", id });
+    }
+
+    function clearCart() {
+        dispatchCartAction({ type: "CLEAR_CART" });
+    }
+
+    const cartContext = {
+        items: cart.items,
+        addItem,
+        removeItem,
+        clearCart,
+    };
+
+    return (
+        <CartContext.Provider value={cartContext}>
+            {children}
+        </CartContext.Provider>
+    );
 }
 
 export default CartContext;

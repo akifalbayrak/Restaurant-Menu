@@ -1,45 +1,82 @@
-import { createContext, useState } from 'react';
+import { createContext, useState, useEffect } from "react";
+import { auth, googleProvider } from "../config/firebase";
+import { signInWithPopup, signOut } from "firebase/auth";
 
 const UserProgressContext = createContext({
-  progress: '', // 'cart', 'checkout'
-  showCart: () => {},
-  hideCart: () => {},
-  showCheckout: () => {},
-  hideCheckout: () => {},
+    progress: "", // 'cart', 'checkout'
+    showCart: () => {},
+    hideCart: () => {},
+    showCheckout: () => {},
+    hideCheckout: () => {},
 });
 
 export function UserProgressContextProvider({ children }) {
-  const [userProgress, setUserProgress] = useState('');
+    const [user, setUser] = useState(null);
+    const [userProgress, setUserProgress] = useState("");
 
-  function showCart() {
-    setUserProgress('cart');
-  }
+    useEffect(() => {
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+            setUser(user);
+        });
+        return () => unsubscribe();
+    }, []);
 
-  function hideCart() {
-    setUserProgress('');
-  }
+    const signInWithGoogle = async () => {
+        try {
+            await signInWithPopup(auth, googleProvider);
+        } catch (err) {
+            console.error(err);
+        }
+    };
 
-  function showCheckout() {
-    setUserProgress('checkout');
-  }
+    const logout = async () => {
+        try {
+            await signOut(auth);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+    function showCart() {
+        setUserProgress("cart");
+    }
 
-  function hideCheckout() {
-    setUserProgress('');
-  }
+    function hideCart() {
+        setUserProgress("");
+    }
 
-  const userProgressCtx = {
-    progress: userProgress,
-    showCart,
-    hideCart,
-    showCheckout,
-    hideCheckout,
-  };
+    function showCheckout() {
+        setUserProgress("checkout");
+    }
 
-  return (
-    <UserProgressContext.Provider value={userProgressCtx}>
-      {children}
-    </UserProgressContext.Provider>
-  );
+    function hideCheckout() {
+        setUserProgress("");
+    }
+
+    const userProgressCtx = {
+        progress: userProgress,
+        showCart,
+        hideCart,
+        showCheckout,
+        hideCheckout,
+    };
+
+    return (
+        <UserProgressContext.Provider value={userProgressCtx}>
+            <>
+                {auth?.currentUser?.uid}
+                {user ? (
+                    <button className="button" onClick={logout}>
+                        Logout
+                    </button>
+                ) : (
+                    <button className="button" onClick={signInWithGoogle}>
+                        Sign In With Google
+                    </button>
+                )}
+                {children}
+            </>
+        </UserProgressContext.Provider>
+    );
 }
 
 export default UserProgressContext;

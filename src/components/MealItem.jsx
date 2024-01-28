@@ -3,8 +3,24 @@ import { useContext } from "react";
 import { currencyFormatter } from "../util/formatting.js";
 import Button from "./UI/Button.jsx";
 import CartContext from "../store/CartContext.jsx";
+import { getDownloadURL, ref } from 'firebase/storage';
+import {storage} from "../config/firebase.js"
+import { useState,useEffect } from "react";
 
 export default function MealItem({ meal }) {
+
+    const [imageUrl, setImageUrl] = useState(null);
+
+    useEffect(() => {
+        const imageRef = ref(storage, meal.image);
+        getDownloadURL(imageRef)
+            .then((url) => {
+                setImageUrl(url);
+            })
+            .catch((error) => {
+                console.error('Error getting download URL:', error);
+            });
+    }, [meal.image]);
     const cartCtx = useContext(CartContext);
 
     function handleAddMealToCart() {
@@ -15,7 +31,7 @@ export default function MealItem({ meal }) {
         <li className="meal-item">
             <article>
                 <img
-                    src={`http://localhost:3000/${meal.image}`}
+                    src={imageUrl}
                     alt={meal.name}
                 />
                 <div>
