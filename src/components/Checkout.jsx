@@ -16,12 +16,6 @@ import {
     updateDoc,
     doc,
 } from "firebase/firestore";
-const requestConfig = {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json",
-    },
-};
 
 export default function Checkout() {
     const cartCtx = useContext(CartContext);
@@ -62,16 +56,24 @@ export default function Checkout() {
                     tableNumber: tableNumber,
                 });
                 swal({
-                    text: "Ordered Successfully!",
+                    text: `Ordered Successfully!`,
                     icon: "success",
-                });
+                    timer: 2000,
+                    buttons: false
+                  });
                 }else{
                     throw new Error("Authentication Error");
                 }
 
             } catch (err) {
                 console.log(err)
-                swal("Authentication Error", "Please Sign In", "error");
+                swal({
+                    title:"Authentication Error",
+                    text: `Please Sign In`,
+                    icon: "error",
+                    timer: 2000,
+                    buttons: false
+                  });
             }
         });
     
@@ -88,10 +90,6 @@ export default function Checkout() {
             <Button>Submit Order</Button>
         </>
     );
-
-    // if (isSending) {
-    //     actions = <span>Sending order data...</span>;
-    // }
 
     if (false) {
         return (
@@ -127,13 +125,6 @@ export default function Checkout() {
                 <p>Total Amount: {currencyFormatter.format(cartTotal)}</p>
 
                 <Input label="Table Number" type="number" id="tnum" />
-                {/* <Input label="E-Mail Address" type="email" id="email" />
-                <Input label="Street" type="text" id="street" />
-                <div className="control-row">
-                    <Input label="Postal Code" type="text" id="postal-code" />
-                    <Input label="City" type="text" id="city" />
-                </div> */}
-
                 {false && (
                     <Error title="Failed to submit order" message={error} />
                 )}

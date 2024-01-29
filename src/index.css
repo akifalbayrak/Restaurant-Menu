@@ -9,8 +9,9 @@ body {
     font-family: "Raleway", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background: linear-gradient(#29251c, #2c2306);
-    color: #d9e2f1;
+    background: linear-gradient(#0D1F21
+    ,#c0c2c1);
+    color: #EAF1F7;
     min-height: 100vh;
 }
 
@@ -62,7 +63,7 @@ h1 {
 }
 
 .meal-item {
-    background-color: #1d1a16;
+    background-color: #0D1F21;
     border-radius: 1rem;
     overflow: hidden;
     text-align: center;
@@ -94,7 +95,7 @@ h1 {
 
 .meal-item-price {
     display: inline-block;
-    background-color: #312c1d;
+    background-color: #2020202c;
     color: #ffc404;
     font-size: 0.9rem;
     font-weight: bold;
@@ -271,8 +272,8 @@ h1 {
     border: 1px solid #ccc;
     border-radius: 5px;
 }
-.loginContainer PhoneInput {
-  width: 100%;
+.loginContainer input {
+  width: 80%;
   padding: 10px;
   margin: 0 15px;
   font-size: 16px;

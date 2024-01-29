@@ -45,17 +45,44 @@ export function UserProgressContextProvider({ children }) {
                 recaptchaVerifier
             );
             setUser(confirmation);
+            swal({
+                title:"Code sent",
+                text: `Check your phone`,
+                icon: "success",
+                timer: 2000,
+                buttons: false
+              });
         } catch (error) {
-            console.error(error);
+            swal({
+                title:"Code can not send",
+                text: `${error.message}`,
+                icon: "error",
+                timer: 2000,
+                buttons: false
+              });
         }
     };
 
     const verifyOtp = async () => {
         try {
             const data = await user.confirm(otp);
+            swal({
+                title:"Verification succesfully",
+                text: `Now you can order our delicious food`,
+                icon: "success",
+                timer: 2000,
+                buttons: false
+              });
             console.log(data);
         } catch (error) {
             console.log(error);
+            swal({
+                title:"Verification Problem",
+                text: `${error.message}`,
+                icon: "error",
+                timer: 2000,
+                buttons: false
+              });
         }
     };
     useEffect(() => {
@@ -123,12 +150,12 @@ export function UserProgressContextProvider({ children }) {
                             onChange={setPhone}
                         />
                         <div id="recaptcha"></div>
-                        <button onClick={sendOtp}>Send OTP</button>
+                        <button onClick={sendOtp}>Send Code</button>
                         <input
                             onChange={(e) => setOtp(e.target.value)}
                             placeholder="Enter OTP"
                         />
-                        <button onClick={verifyOtp}>Verify OTP</button>
+                        <button onClick={verifyOtp}>Emter Code</button>
                     </div>
                 )}
                 {children}

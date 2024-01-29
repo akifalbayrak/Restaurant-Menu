@@ -1,5 +1,6 @@
 import { createContext, useReducer } from "react";
 import { db, auth } from "../config/firebase";
+import swal from 'sweetalert';
 import {
     getDocs,
     collection,
@@ -33,8 +34,14 @@ function cartReducer(state, action) {
         } else {
             updatedItems.push({ ...action.item, quantity: 1 });
         }
-
-        return { ...state, items: updatedItems };
+        swal({
+            title: "Order Added",
+            text: `${action.item.name}`,
+            icon: "success",
+            timer: 2000,
+            buttons: false
+          });
+                  return { ...state, items: updatedItems };
     }
 
     if (action.type === "REMOVE_ITEM") {
@@ -70,29 +77,7 @@ export function CartContextProvider({ children }) {
     const order = []
     const orderCollectionRef = collection(db, "order");
     const [cart, dispatchCartAction] = useReducer(cartReducer, { items: [] });
-    // const getOrderList = async () => {
-    //     try {
-    //         const data = await getDocs(orderCollectionRef);
-    //         const filteredData = data.docs.map((doc) => ({
-    //             ...doc.data(),
-    //             id: doc.id,
-    //         }));
-    //     } catch (err) {
-    //         console.error(err);
-    //     }
-    // };
-    // getOrderList();
 
-    // const addOrder = async (meal) => {
-    //     try {
-    //         await addDoc(orderCollectionRef, {
-    //             name : meal.name,
-    //             userId: auth?.currentUser?.uid,
-    //         });
-    //     } catch (err) {
-    //         console.error(err);
-    //     }
-    // };
 
     const deleteOrder = async (id) => {
         const orderDoc = doc(db, "order", id);
