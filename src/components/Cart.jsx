@@ -24,6 +24,9 @@ export default function Cart() {
         userProgressCtx.showCheckout();
     }
 
+    function handleDeleteAll() {
+        cartCtx.clearCart();
+    }
     return (
         <Modal
             className="cart"
@@ -50,7 +53,17 @@ export default function Cart() {
                     Close
                 </Button>
                 {cartCtx.items.length > 0 && (
-                    <Button onClick={handleGoToCheckout}>Go to Checkout</Button>
+                    <>
+                        <Button
+                            id="deleteAll"
+                            textOnly
+                            onClick={handleDeleteAll}>
+                            Delete All
+                        </Button>
+                        <Button onClick={handleGoToCheckout}>
+                            Go to Checkout
+                        </Button>
+                    </>
                 )}
             </p>
         </Modal>

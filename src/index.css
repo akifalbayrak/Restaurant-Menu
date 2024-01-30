@@ -13,6 +13,7 @@ body {
     ,#c0c2c1);
     color: #EAF1F7;
     min-height: 100vh;
+    
 }
 
 #main-header {
@@ -68,6 +69,7 @@ h1 {
     overflow: hidden;
     text-align: center;
     box-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
+    margin: 2rem auto;
 }
 
 .meal-item article {
@@ -264,31 +266,33 @@ h1 {
 
 .loginContainer {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    max-width: 300px;
-    margin: 20px auto;
-    padding: 20px;
-    border: 1px solid #ccc;
+    /* max-width: 300px; */
     border-radius: 5px;
 }
+
+.loginContainer #sendPart {
+    display: flex;
+}
+.loginContainer #otpPart {
+    display: flex;
+}
 .loginContainer input {
-  width: 80%;
+  /* width: 100%; */
   padding: 10px;
   margin: 0 15px;
   font-size: 16px;
-  border: 1px solid #ccc;
+  /* border: 1px solid #ccc; */
   border-radius: 5px;
   box-sizing: border-box;
 }
 
 .loginContainer button {
-  padding: 10px 20px;
   font-size: 16px;
-  background-color: #007bff;
-  color: #fff;
+  /* width: 100%; */
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  margin:20px auto
+  margin:20px;
 }

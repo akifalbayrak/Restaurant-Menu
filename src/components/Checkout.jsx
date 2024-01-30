@@ -78,6 +78,7 @@ export default function Checkout() {
         });
     
         handleClose();
+        document.getElementById("deleteAll").click();
 
     }
     
