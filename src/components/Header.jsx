@@ -4,7 +4,6 @@ import Button from "./UI/Button.jsx";
 import logoImg from "../assets/logo.jpg";
 import CartContext from "../store/CartContext.jsx";
 import UserProgressContext from "../store/UserProgressContext.jsx";
-
 import { auth, googleProvider } from "../config/firebase";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
@@ -34,23 +33,30 @@ export default function Header() {
     }
 
 
+// Declare a global variable to store the recaptcha element
+let recaptchaElement = null;
 
-    // Create the verifier only once and store it in a state variable
-    const [verifier, setVerifier] = useState(null);
+// Create the verifier only once and store it in a state variable
+const [verifier, setVerifier] = useState(null);
 
-    // Initialize the verifier on component mount
-    useEffect(() => {
-        const recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha", {
-            size: "invisible",
-            container: "recaptcha",
-        });
-        setVerifier(recaptchaVerifier);
-        return () => {
-            // Cleanup function to clear the verifier
-            recaptchaVerifier.clear();
-            // document.body.removeChild(recaptchaContainer);
-        };
-    }, []);
+// Initialize the verifier on component mount
+useEffect(() => {
+    // Check if the recaptcha element already exists
+    if (recaptchaElement) {
+        // Reuse the existing recaptcha element
+        setVerifier(new RecaptchaVerifier(auth, recaptchaElement, {
+            size: 'invisible',
+        }));
+    } else {
+        // Create a new recaptcha element and store it in the global variable
+        recaptchaElement = document.createElement('div');
+        recaptchaElement.id = 'recaptcha';
+        document.body.appendChild(recaptchaElement);
+        setVerifier(new RecaptchaVerifier(auth, recaptchaElement, {
+            size: 'invisible',
+        }));
+    }
+}, []);
 
     const sendOtp = async () => {
         try {
@@ -71,6 +77,7 @@ export default function Header() {
             document.getElementById("sendPart").style.display = "none";
             document.getElementById("otpPart").style.display = "inline";
         } catch (error) {
+            console.log(error)
             swal({
                 title: "Code can not send",
                 text: `${error.message}`,
@@ -118,7 +125,9 @@ export default function Header() {
 
     const logout = async () => {
         try {
-            document.getElementById("deleteAll").click();
+            if(cartCtx.items.length > 0){
+                document.getElementById("deleteAll").click();
+            }
             await signOut(auth);
         } catch (err) {
             console.error(err);
@@ -130,6 +139,9 @@ export default function Header() {
             <div id="title">
                 <img src={logoImg} alt="A restaurant" />
                 <h1>Food Menu</h1>
+                <Button onClick={() => window.location.href = "/orders"} className="button">
+                Go to Orders
+            </Button>
             </div>
             <div className="loginContainer">
                 {auth?.currentUser?.phoneNumber ? (

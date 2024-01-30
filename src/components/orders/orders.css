@@ -1,0 +1,45 @@
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.item {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.details {
+    margin-bottom: 10px;
+}
+
+.details h3 {
+    margin: 5px 0;
+}
+
+.details hr {
+    margin-top: 10px;
+    border: none;
+    border-top: 1px solid #ccc;
+}
+
+.delete-button {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.delete-button:hover {
+    background-color: #c82333;
+}

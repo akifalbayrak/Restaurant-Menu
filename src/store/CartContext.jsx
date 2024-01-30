@@ -1,6 +1,6 @@
 import { createContext, useReducer } from "react";
 import { db, auth } from "../config/firebase";
-import swal from 'sweetalert';
+import swal from "sweetalert";
 import {
     getDocs,
     collection,
@@ -39,9 +39,9 @@ function cartReducer(state, action) {
             text: `${action.item.name}`,
             icon: "success",
             timer: 2000,
-            buttons: false
-          });
-                  return { ...state, items: updatedItems };
+            buttons: false,
+        });
+        return { ...state, items: updatedItems };
     }
 
     if (action.type === "REMOVE_ITEM") {
@@ -73,11 +73,9 @@ function cartReducer(state, action) {
 }
 
 export function CartContextProvider({ children }) {
-
-    const order = []
+    const order = [];
     const orderCollectionRef = collection(db, "order");
     const [cart, dispatchCartAction] = useReducer(cartReducer, { items: [] });
-
 
     const deleteOrder = async (id) => {
         const orderDoc = doc(db, "order", id);

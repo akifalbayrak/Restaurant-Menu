@@ -26,6 +26,7 @@ export default function Cart() {
 
     function handleDeleteAll() {
         cartCtx.clearCart();
+        userProgressCtx.hideCart();
     }
     return (
         <Modal
