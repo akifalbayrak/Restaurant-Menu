@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&family=Lato:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
 * {
     box-sizing: border-box;
@@ -46,11 +46,9 @@ body {
     font-family: "Raleway", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background: linear-gradient(#0D1F21
-    ,#c0c2c1);
-    color: #EAF1F7;
+    background: linear-gradient(#0d1f21, #c0c2c1);
+    color: #eaf1f7;
     min-height: 100vh;
-    
 }
 
 #main-header {
@@ -101,7 +99,7 @@ h1 {
 }
 
 .meal-item {
-    background-color: #0D1F21;
+    background-color: #0d1f21;
     border-radius: 1rem;
     overflow: hidden;
     text-align: center;
@@ -316,20 +314,20 @@ h1 {
     display: flex;
 }
 .loginContainer input {
-  /* width: 100%; */
-  padding: 10px;
-  margin: 0 15px;
-  font-size: 16px;
-  /* border: 1px solid #ccc; */
-  border-radius: 5px;
-  box-sizing: border-box;
+    /* width: 100%; */
+    padding: 10px;
+    margin: 0 15px;
+    font-size: 16px;
+    /* border: 1px solid #ccc; */
+    border-radius: 5px;
+    box-sizing: border-box;
 }
 
 .loginContainer button {
-  font-size: 16px;
-  /* width: 100%; */
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin:20px;
+    font-size: 16px;
+    /* width: 100%; */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 20px;
 }

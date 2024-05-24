@@ -17,7 +17,13 @@ function Orders() {
                 id: doc.id, // Access the document ID
                 ...doc.data(),
             }));
-            setOrdersList(filteredData);
+
+            // Sort the orders from newest to oldest
+            const sortedData = filteredData.sort(
+                (a, b) => b.orderDate - a.orderDate
+            );
+
+            setOrdersList(sortedData);
         } catch (err) {
             console.error(err);
         }
@@ -78,7 +84,7 @@ function Orders() {
                                 {order.orderDate
                                     ? new Date(
                                           order.orderDate.seconds * 1000
-                                      ).toLocaleString("en-US", {
+                                      ).toLocaleString("tr-TR", {
                                           year: "numeric",
                                           month: "2-digit",
                                           day: "2-digit",
@@ -90,12 +96,13 @@ function Orders() {
                             </h3>
                             <h3>Table Number: {order.tableNumber}</h3>
                         </div>
-                        {auth?.currentUser?.phoneNumber =="+905550005500" && 
-                        <button
-                            className="delete-button"
-                            onClick={() => deleteOrder(order.id)}>
-                            Delete
-                        </button>}
+                        {auth?.currentUser?.phoneNumber == "+905550005500" && (
+                            <button
+                                className="delete-button"
+                                onClick={() => deleteOrder(order.id)}>
+                                Delete
+                            </button>
+                        )}
                     </li>
                 ))}
             </ul>
