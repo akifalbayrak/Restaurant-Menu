@@ -32,31 +32,34 @@ export default function Header() {
         userProgressCtx.showCart();
     }
 
+    // Declare a global variable to store the recaptcha element
+    let recaptchaElement = null;
 
-// Declare a global variable to store the recaptcha element
-let recaptchaElement = null;
+    // Create the verifier only once and store it in a state variable
+    const [verifier, setVerifier] = useState(null);
 
-// Create the verifier only once and store it in a state variable
-const [verifier, setVerifier] = useState(null);
-
-// Initialize the verifier on component mount
-useEffect(() => {
-    // Check if the recaptcha element already exists
-    if (recaptchaElement) {
-        // Reuse the existing recaptcha element
-        setVerifier(new RecaptchaVerifier(auth, recaptchaElement, {
-            size: 'invisible',
-        }));
-    } else {
-        // Create a new recaptcha element and store it in the global variable
-        recaptchaElement = document.createElement('div');
-        recaptchaElement.id = 'recaptcha';
-        document.body.appendChild(recaptchaElement);
-        setVerifier(new RecaptchaVerifier(auth, recaptchaElement, {
-            size: 'invisible',
-        }));
-    }
-}, []);
+    // Initialize the verifier on component mount
+    useEffect(() => {
+        // Check if the recaptcha element already exists
+        if (recaptchaElement) {
+            // Reuse the existing recaptcha element
+            setVerifier(
+                new RecaptchaVerifier(auth, recaptchaElement, {
+                    size: "invisible",
+                })
+            );
+        } else {
+            // Create a new recaptcha element and store it in the global variable
+            recaptchaElement = document.createElement("div");
+            recaptchaElement.id = "recaptcha";
+            document.body.appendChild(recaptchaElement);
+            setVerifier(
+                new RecaptchaVerifier(auth, recaptchaElement, {
+                    size: "invisible",
+                })
+            );
+        }
+    }, []);
 
     const sendOtp = async () => {
         try {
@@ -75,9 +78,9 @@ useEffect(() => {
                 buttons: false,
             });
             document.getElementById("sendPart").style.display = "none";
-            document.getElementById("otpPart").style.display = "inline";
+            document.getElementById("otpPart").style.display = "inline-flex";
         } catch (error) {
-            console.log(error)
+            console.log(error);
             swal({
                 title: "Code can not send",
                 text: `${error.message}`,
@@ -125,7 +128,7 @@ useEffect(() => {
 
     const logout = async () => {
         try {
-            if(cartCtx.items.length > 0){
+            if (cartCtx.items.length > 0) {
                 document.getElementById("deleteAll").click();
             }
             await signOut(auth);
@@ -139,9 +142,11 @@ useEffect(() => {
             <div id="title">
                 <img src={logoImg} alt="A restaurant" />
                 <h1>Food Menu</h1>
-                <Button onClick={() => window.location.href = "/orders"} className="button">
-                Go to Orders
-            </Button>
+                <Button
+                    onClick={() => (window.location.href = "/orders")}
+                    className="button">
+                    Go to Orders
+                </Button>
             </div>
             <div className="loginContainer">
                 {auth?.currentUser?.phoneNumber ? (
@@ -179,7 +184,6 @@ useEffect(() => {
                 <Button textOnly onClick={handleShowCart}>
                     Cart ({totalCartItems})
                 </Button>
-
             </nav>
         </header>
     );
