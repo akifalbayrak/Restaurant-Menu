@@ -422,4 +422,9 @@ h1 {
         flex-direction: column;
         justify-content: center;
     }
+
+    #meals {
+        margin: 0 auto;
+        padding: 0;
+    }
 }
