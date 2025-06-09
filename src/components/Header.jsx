@@ -4,15 +4,13 @@ import Button from "./UI/Button.jsx";
 import logoImg from "../assets/logo.jpg";
 import CartContext from "../store/CartContext.jsx";
 import UserProgressContext from "../store/UserProgressContext.jsx";
-import { auth, googleProvider } from "../config/firebase";
+import { auth } from "../config/firebase";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 
 import {
-    getAuth,
     RecaptchaVerifier,
     signInWithPhoneNumber,
-    signInWithPopup,
     signOut,
 } from "firebase/auth";
 

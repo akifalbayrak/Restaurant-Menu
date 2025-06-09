@@ -1,20 +1,25 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider,signInWithPhoneNumber  } from "firebase/auth";
+import {
+    getAuth,
+    GoogleAuthProvider,
+} from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+import { getAnalytics } from "firebase/analytics";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBXYILTviGdxT_T0RyHeoaWcLbysujBVpA",
-    authDomain: "food-order-d51fb.firebaseapp.com",
-    projectId: "food-order-d51fb",
-    storageBucket: "food-order-d51fb.appspot.com",
-    messagingSenderId: "100874619758",
-    appId: "1:100874619758:web:5e47d0dbc82514e3b6cf7f",
-    measurementId: "G-8LPRFYYQJK",
-};
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+    appId: import.meta.env.VITE_FIREBASE_APP_ID,
+    measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
+  };
 
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
 export const db = getFirestore(app);
 export const storage = getStorage(app);
+export const analytics = getAnalytics(app);
